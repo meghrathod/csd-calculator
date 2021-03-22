@@ -49,7 +49,7 @@ app.post("/", function (req, res) {
 });
 
 app.post("/failure", function (req, res){
-    res.redirect("/");
+    res.redirect("https://me.meghrathod.tech");
 })
 
 app.listen(process.env.PORT || 3000, function () {
