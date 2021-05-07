@@ -21,7 +21,7 @@ const PercentSchema = new mongoose.Schema({
 const Percent = mongoose.model("Percent", PercentSchema);
 
 app.get("/", function (req, res) {
-    res.sendFile(__dirname + "/signup.html");
+    res.sendFile(__dirname + "/calculate.html");
 });
 
 app.post("/", async function (req, res) {
@@ -81,6 +81,32 @@ app.post("/", async function (req, res) {
 app.post("/failure", function (req, res) {
     res.sendFile(__dirname + "/failure.html");
 });
+
+app.get("/view", async function(req, res){
+    var sum = 0;
+    var responses = 0;
+    var average = 0;
+
+    const filter = {};
+    const all = await Percent.find(filter);
+    all.map((person) => {
+        sum += person.percentageNumber;
+        responses += 1;
+        average = sum / responses;
+    });
+    console.log(sum);
+    console.log(average);
+
+    // await(sum/responses);
+    //     console.log(average);
+
+    res.render("view", {
+        data: {
+            responses: responses,
+            average: average,
+        },
+    });
+})
 
 app.listen(process.env.PORT || 3000, function () {
     console.log("Server started at port 3000");
