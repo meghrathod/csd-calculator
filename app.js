@@ -1,16 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose")
-
+require("dotenv").config({ path: __dirname + "/.env" });
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-mongoose.connect("mongodb://localhost:27017/marksDB", {
+mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
 });
 
 const PercentSchema = new mongoose.Schema({
@@ -69,11 +69,6 @@ app.post("/", async function (req, res) {
         responses+=1;
         average = sum/responses
     })
-    console.log(sum);
-    console.log(average)
-
-// await(sum/responses);
-//     console.log(average);
 
     res.render("success", {data: { percentage: percentage, responses: responses, average: average }});
 });
@@ -94,11 +89,7 @@ app.get("/view", async function(req, res){
         responses += 1;
         average = sum / responses;
     });
-    console.log(sum);
-    console.log(average);
 
-    // await(sum/responses);
-    //     console.log(average);
 
     res.render("view", {
         data: {

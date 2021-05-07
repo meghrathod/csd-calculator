@@ -9,10 +9,14 @@
   "author": "Megh R.",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^9.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "mongoose": "^5.12.7",
     "request": "^2.88.2",
     "require": "^2.4.20"
+  },
+  "engines": {
+    "node": "14.16.0"
   }
 }
