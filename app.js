@@ -1,61 +1,88 @@
 const express = require("express");
-const https = require("https");
+const mongoose = require("mongoose")
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.set("view engine", "ejs");
+
+mongoose.connect("mongodb://localhost:27017/marksDB", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+});
+
+const PercentSchema = new mongoose.Schema({
+    name: String,
+    percentageNumber: Number,
+});
+
+const Percent = mongoose.model("Percent", PercentSchema);
 
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/signup.html");
 });
 
-app.post("/", function (req, res) {
-    const firstName = req.body.FirstName;
-    const lastName = req.body.LastName;
-    const email = req.body.inputEmail;
+app.post("/", async function (req, res) {
+    const Name = req.body.Name;
+    const Quiz1 = parseFloat(req.body.Quiz1);
+    const Quiz2 = parseFloat(req.body.Quiz2);
+    const Quiz3 = parseFloat(req.body.Quiz3);
+    const Lab1 = parseFloat(req.body.Lab1);
+    const Lab2 = parseFloat(req.body.Lab2);
+    var MidsemObj = parseFloat(req.body.MidsemObj);
+    var MidsemSub = parseFloat(req.body.MidsemSub);
+    const ClassAssign = parseFloat(req.body.ClassAssign);
 
-    const data = {
-        members: [
-            {
-                email_address: email,
-                status: "subscribed",
-                merge_fields: {
-                    FNAME: firstName,
-                    LNAME: lastName
-                },
-            },
-        ],
-    };
-    const jsonData = JSON.stringify(data);
-    const URL = "https://us1.api.mailchimp.com/3.0/lists/e26331b325";
-    const options = {
-        method: "POST",
-        auth: "meghrathod:069af24e6f6fd5c9cb504af191c60208-us1",
-    }
-    const request = https.request(URL, options, function(response){
-        response.on("data", function (D) {
-            const status = response.statusCode;
-            if (status === 200){
-                res.sendFile(__dirname + "/success.html");            }
-            else{
-                res.sendFile(__dirname + "/failure.html");
-            }
-        })
+    var totalQuiz = Quiz1 / 15 + Quiz2 / 15 + Quiz3 / 10;
+    totalQuiz *= 5;
+    var totalLab = Lab1 / 5 + Lab2 / 7;
+    totalLab *= 10;
+
+    MidsemObj /= 20;
+    MidsemSub /= 40;
+    MidsemObj *= 30;
+    MidsemSub *= 70;
+
+    var midsemTotal = (MidsemSub + MidsemObj) * 25;
+    midsemTotal /= 100;
+    var totalSoFar = totalLab + midsemTotal + totalQuiz + ClassAssign;
+    var finalPercentage = totalSoFar + (totalSoFar / 65) * 35;
+    var percentage = finalPercentage.toFixed(2)
+
+    const Person = new Percent({
+        name: Name,
+        percentageNumber: finalPercentage,
+    });
+
+    await Person.save();
+
+    var sum = 0;
+    var responses = 0;
+    var average = 0;
+
+    const filter = {};
+    const all = await Percent.find(filter);
+    all.map(person => {
+        sum+=person.percentageNumber;
+        responses+=1;
+        average = sum/responses
     })
-    request.write(jsonData);
-    request.end();
+    console.log(sum);
+    console.log(average)
 
+// await(sum/responses);
+//     console.log(average);
+
+    res.render("success", {data: { percentage: percentage, responses: responses, average: average }});
 });
 
-app.post("/failure", function (req, res){
-    res.redirect("https://me.meghrathod.tech");
-})
+app.post("/failure", function (req, res) {
+    res.sendFile(__dirname + "/failure.html");
+});
 
 app.listen(process.env.PORT || 3000, function () {
     console.log("Server started at port 3000");
 });
 
-//API Key
-// 069af24e6f6fd5c9cb504af191c60208-us1
-// List ID: e26331b325

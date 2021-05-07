@@ -52,13 +52,20 @@
         <main class="form-signin">
             <form action="/" method="POST">
                 <img class="mb-4" src="images/logo.png" alt="logo" width="72" height="57">
-                <h1 class="h3 mb-3 fw-normal">Get in touch!</h1>
-                <input type="text" class="form-control top" name="FirstName" id="FirstName" placeholder="First Name" required autofocus>
-                <input type="text" class="form-control middle" name="LastName" id="LastName" placeholder="Last Name" required>
-                <input type="email" class="form-control bottom" id="inputEmail" name="inputEmail" placeholder="Email address" required>
+                <h1 class="h3 mb-3 fw-normal">CSE Calculator</h1>
+                <p>Enter Your marks</p>
+                <input type="text" class="form-control top" name="Name" id="Name" placeholder="Name (optional)">
+                <input type="number" class="form-control middle" name="Quiz1" id="Quiz1" placeholder="Quiz 1" required min="0" max="15">
+                <input type="number" class="form-control middle" name="Quiz2" id="Quiz2" placeholder="Quiz 2" required min="0" max="15">
+                <input type="number" class="form-control middle" name="Quiz3" id="Quiz3" placeholder="Quiz 3" required min="0" max="10">
+                <input type="number" class="form-control middle" name="Lab1" id="Lab1" placeholder="Lab 1" required min="0" max="5">
+                <input type="number" class="form-control middle" name="Lab2" id="Lab2" placeholder="Lab 2" required min="0" max="7">
+                <input type="number" class="form-control middle" name="MidsemObj" id="MidsemObj" placeholder="Midsem Objective" required min="0" max="20">
+                <input type="number" class="form-control middle" name="MidsemSub" id="MidsemSub" placeholder="Midsem Subjective" required min="0" max="40">
+                <input type="number" class="form-control bottom" name="ClassAssign" id="ClassAssign" placeholder="Class Assesment that you feel about your participation" required min="0" max="5">
 
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Contact me!</button>
-                <p class="mt-5 mb-3 text-muted">&copy; Megh Rathod</p>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Calculate!</button>
+                <p class="mt-5 mb-3 text-muted">&copy; CSE 2024</p>
             </form>
         </main>
     

@@ -10,8 +10,10 @@
 </head>
 <body>
     <div class="jumbotron">
-        <h1 class="display-4">Success</h1>
-        <p class="lead">Hooray! That was a success. We will get in touch shortly.</p>
+        <h1 class="display-4">
+            Your <%= data.percentage %> % 
+        </h1>
+        <p class="lead">Class Average Right now is <%= data.average.toFixed(2) %>% with <%= data.responses %> responses.</p>
         <hr class="my-4">
     </div>
 </body>
